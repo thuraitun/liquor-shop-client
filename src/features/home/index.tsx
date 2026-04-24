@@ -1,6 +1,6 @@
 import { Category } from "./components/category";
 import { HomeSlider } from "./components/home-slider";
-import { Product } from "./components/product";
+import { LatestProduct } from "./components/latest-product";
 import { Service } from "./components/service";
 
 export const Home = () => {
@@ -8,7 +8,7 @@ export const Home = () => {
     <div className="">
       <HomeSlider />
       <Category />
-      <Product />
+      <LatestProduct />
       <Service />
     </div>
   );

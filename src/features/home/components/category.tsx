@@ -6,31 +6,31 @@ export const Category = () => {
       name: "Whiskey",
       image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
       description: "Premium imported whiskey",
-      href: "/products/whiskey",
+      href: "/products",
     },
     {
       name: "Vodka",
       image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
       description: "Premium imported vodka",
-      href: "/products/vodka",
+      href: "/products",
     },
     {
       name: "Rum",
       image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
       description: "Premium imported rum",
-      href: "/products/rrum",
+      href: "/products",
     },
     {
       name: "Tequila",
       image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
       description: "Premium imported tequila",
-      href: "/products/tequila",
+      href: "/products",
     },
     {
       name: "Gin",
       image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
       description: "Premium imported gin",
-      href: "/products/gin",
+      href: "/products",
     },
   ];
 
