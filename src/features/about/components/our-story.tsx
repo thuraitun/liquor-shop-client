@@ -1,5 +1,5 @@
 import { Text, Timeline } from "@mantine/core";
-import { GitBranchIcon, GitCommitIcon, GitPullRequestIcon } from "lucide-react";
+import { GitCommitIcon } from "lucide-react";
 
 export const OurStory = () => {
   const stories = [
