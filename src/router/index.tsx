@@ -5,6 +5,7 @@ import { NoFound } from "../components/no-found";
 import { Product } from "../features/product";
 import { About } from "../features/about";
 import { Cart } from "../features/cart";
+import { AdminHome } from "../features/admin/admin-home";
 
 const router = createBrowserRouter([
   {
@@ -36,7 +37,12 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     // element: <Layout />,
-    children: [],
+    children: [
+      {
+        path: "",
+        element: <AdminHome />,
+      },
+    ],
   },
 ]);
 
