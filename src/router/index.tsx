@@ -6,6 +6,8 @@ import { Product } from "../features/product";
 import { About } from "../features/about";
 import { Cart } from "../features/cart";
 import { AdminHome } from "../features/admin/admin-home";
+import { AdminBanner } from "../features/admin/banner";
+import { AdminLayout } from "../admin-layout";
 
 const router = createBrowserRouter([
   {
@@ -17,30 +19,35 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: "",
+        index: true,
         element: <Home />,
       },
       {
-        path: "/products",
+        path: "products",
         element: <Product />,
       },
       {
-        path: "/about-us",
+        path: "about-us",
         element: <About />,
       },
       {
-        path: "/cart",
+        path: "cart",
         element: <Cart />,
       },
     ],
   },
+
   {
     path: "/admin",
-    // element: <Layout />,
+    element: <AdminLayout />,
     children: [
       {
-        path: "",
+        index: true,
         element: <AdminHome />,
+      },
+      {
+        path: "banners",
+        element: <AdminBanner />,
       },
     ],
   },
