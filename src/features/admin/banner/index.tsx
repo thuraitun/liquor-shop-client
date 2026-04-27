@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   createBannerSchema,
   type CreateBannerFormData,
-} from "./schemas/create-banner.schema";
+} from "../../../schemas/banners/create-banner.schema";
 import { Button, FileInput } from "@mantine/core";
 export const AdminBanner = () => {
   const queryClient = useQueryClient();

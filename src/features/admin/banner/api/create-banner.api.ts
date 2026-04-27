@@ -1,5 +1,5 @@
 import { apiClient } from "../../../../utils/axios";
-import type { CreateBannerFormData } from "../schemas/create-banner.schema";
+import type { CreateBannerFormData } from "../../../../schemas/banners/create-banner.schema";
 
 export const createBanner = async (data: CreateBannerFormData) => {
   const formData = new FormData();

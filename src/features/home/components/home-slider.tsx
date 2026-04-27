@@ -3,10 +3,12 @@ import { Image } from "@mantine/core";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import Autoplay from "embla-carousel-autoplay";
 import { useRef } from "react";
-import { makeGetBanners } from "../api/get-banners.api";
+import { makeGetBanners } from "../../../api/banners/get-banners.api";
 
 export const HomeSlider = () => {
-  const { data: banners } = useSuspenseQuery(makeGetBanners());
+  const { data: banners } = useSuspenseQuery(
+    makeGetBanners({ is_active: true }),
+  );
 
   const autoplay = useRef(Autoplay({ delay: 3000 }));
   return (
