@@ -1,23 +1,12 @@
 import { Carousel } from "@mantine/carousel";
 import { Image } from "@mantine/core";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import Autoplay from "embla-carousel-autoplay";
 import { useRef } from "react";
+import { makeGetBanners } from "../api/get-banners.api";
 
 export const HomeSlider = () => {
-  const banners = [
-    {
-      id: 1,
-      image: "/images/slideone.jpg",
-    },
-    {
-      id: 2,
-      image: "/images/slidetwo.jpg",
-    },
-    {
-      id: 3,
-      image: "/images/slidethree.jpg",
-    },
-  ];
+  const { data: banners } = useSuspenseQuery(makeGetBanners());
 
   const autoplay = useRef(Autoplay({ delay: 3000 }));
   return (
@@ -33,10 +22,13 @@ export const HomeSlider = () => {
     >
       {banners.map((banner) => (
         <Carousel.Slide key={banner.id}>
-          <Image src={banner.image} alt={`Slide ${banner.id}`} height={300} />
+          <Image
+            src={banner.image_url}
+            alt={`Slide ${banner.id}`}
+            height={300}
+          />
         </Carousel.Slide>
       ))}
-      {/* ...other slides */}
     </Carousel>
   );
 };

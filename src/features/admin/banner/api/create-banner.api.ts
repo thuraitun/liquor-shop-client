@@ -4,11 +4,7 @@ import type { CreateBannerFormData } from "../schemas/create-banner.schema";
 export const createBanner = async (data: CreateBannerFormData) => {
   const formData = new FormData();
 
-  formData.append("image_url", data.image_url);
-
-  if (data.is_active !== undefined) {
-    formData.append("is_active", String(data.is_active));
-  }
+  formData.append("image", data.image);
 
   const res = await apiClient.post("/banners/", formData, {
     headers: {

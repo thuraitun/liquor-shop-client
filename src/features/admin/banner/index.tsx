@@ -21,27 +21,36 @@ export const AdminBanner = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["banners"] });
       //   toast.success({ message: "Banner added successfully" });
+      form.reset();
+      alert("Banner added successfully");
       console.log("Banner added successfully");
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
         // toast.error({ message: error.response?.data.message });
+        alert(error.response?.data.message);
         console.log(error.response?.data.message);
       } else {
         // toast.error({ message: error.message });
+        alert(error.message);
         console.log(error.message);
       }
     },
   });
 
   const handleSubmit = form.handleSubmit((data) => createMutation.mutate(data));
+
+  const { formState: { errors } } = form;
+
+  console.log("form errors", errors);
+  
   return (
     <div>
       <h1>Admin Banner</h1>
 
       <form onSubmit={handleSubmit}>
         <Controller
-          name="image_url"
+          name="image"
           control={form.control}
           rules={{ required: "Image is required" }}
           render={({ field, fieldState }) => (
@@ -54,6 +63,7 @@ export const AdminBanner = () => {
             />
           )}
         />
+
         <Button type="submit">Save</Button>
       </form>
     </div>
