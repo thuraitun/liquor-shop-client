@@ -1,5 +1,6 @@
-import { apiClient } from "../../../../utils/axios";
-import type { CreateBannerFormData } from "../../../../schemas/banners/create-banner.schema";
+import { useMutation } from "@tanstack/react-query";
+import type { CreateBannerFormData } from "../../schemas/banners/create-banner.schema";
+import { apiClient } from "../../utils/axios";
 
 export const createBanner = async (data: CreateBannerFormData) => {
   const formData = new FormData();
@@ -14,3 +15,5 @@ export const createBanner = async (data: CreateBannerFormData) => {
 
   return res.data;
 };
+
+export const makeCreateBanner = () => useMutation({ mutationFn: createBanner });

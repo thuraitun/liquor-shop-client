@@ -1,71 +1,62 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { createBanner } from "./api/create-banner.api";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
-import {
-  createBannerSchema,
-  type CreateBannerFormData,
-} from "../../../schemas/banners/create-banner.schema";
-import { Button, FileInput } from "@mantine/core";
+import { Button } from "@mantine/core";
+import { DataTable } from "../../../components/data-table";
+import { bannerColumns } from "./components/banner-columns";
+import { makeGetBanners } from "../../../api/banners/get-banners.api";
+import { useDisclosure } from "@mantine/hooks";
+import { AddBannerModal } from "./components/add-banner-modal";
+import { useMemo, useState } from "react";
+import type { Banner } from "../../../type/banners/type";
+import { DeleteBannerModal } from "./components/delete-banner-modal";
 export const AdminBanner = () => {
-  const queryClient = useQueryClient();
+  const { data, isLoading } = useSuspenseQuery(makeGetBanners());
+  const [addModalOpened, { open: openAddModal, close: closeAddModal }] =
+    useDisclosure(false);
+  const [
+    deleteModalOpened,
+    { open: openDeleteModal, close: closeDeleteModal },
+  ] = useDisclosure(false);
+  const [bannerId, setBannerId] = useState<string>("");
 
-  const form = useForm<CreateBannerFormData>({
-    resolver: zodResolver(createBannerSchema),
-  });
+  const onEdit = (banner: Banner) => {
+    console.log(banner);
+  };
 
-  const createMutation = useMutation({
-    mutationFn: createBanner,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["banners"] });
-      //   toast.success({ message: "Banner added successfully" });
-      form.reset();
-      alert("Banner added successfully");
-      console.log("Banner added successfully");
-    },
-    onError: (error) => {
-      if (error instanceof AxiosError) {
-        // toast.error({ message: error.response?.data.message });
-        alert(error.response?.data.message);
-        console.log(error.response?.data.message);
-      } else {
-        // toast.error({ message: error.message });
-        alert(error.message);
-        console.log(error.message);
-      }
-    },
-  });
+  const onDelete = (id: string) => {
+    console.log("open delete modal", id);
+    openDeleteModal();
+    setBannerId(id);
+  };
 
-  const handleSubmit = form.handleSubmit((data) => createMutation.mutate(data));
+  const columns = useMemo(
+    () => bannerColumns({ onEdit, onDelete }),
+    [onEdit, onDelete],
+  );
 
-  const { formState: { errors } } = form;
-
-  console.log("form errors", errors);
-  
   return (
-    <div>
-      <h1>Admin Banner</h1>
+    <div className="my-6">
+      <h1 className="text-lg text-center my-5 text-[#e95959] font-bold">
+        Admin Banner
+      </h1>
 
-      <form onSubmit={handleSubmit}>
-        <Controller
-          name="image"
-          control={form.control}
-          rules={{ required: "Image is required" }}
-          render={({ field, fieldState }) => (
-            <FileInput
-              label="Banner Image"
-              placeholder="Upload banner image"
-              value={field.value}
-              onChange={field.onChange}
-              error={fieldState.error?.message}
-            />
-          )}
-        />
+      <div className="flex justify-end my-5">
+        <Button onClick={openAddModal}>Add Banner</Button>
+      </div>
 
-        <Button type="submit">Save</Button>
-      </form>
+      <DataTable
+        columns={columns}
+        data={data || []}
+        isLoading={isLoading}
+        total={10}
+      />
+
+      <AddBannerModal isOpen={addModalOpened} onClose={closeAddModal} />
+      <DeleteBannerModal
+        isOpen={deleteModalOpened}
+        id={bannerId}
+        onClose={closeDeleteModal}
+      />
     </div>
   );
 };

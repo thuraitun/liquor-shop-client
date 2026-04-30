@@ -21,7 +21,7 @@ export const AdminHome = () => {
     },
   ];
   return (
-    <div className="max-w-7xl mx-auto my-20 relative">
+    <div className="my-20">
       <h1 className="text-xl font-bold text-center mb-5 text-[#e95959]">
         Admin Panel
       </h1>
