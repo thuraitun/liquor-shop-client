@@ -5,7 +5,17 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "../../../../utils/toast";
 import { AxiosError } from "axios";
 
-export const DeleteBannerModal = ({ isOpen, onClose, id }) => {
+type DeleteBannerModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  id: string;
+};
+
+export const DeleteBannerModal = ({
+  isOpen,
+  onClose,
+  id,
+}: DeleteBannerModalProps) => {
   const queryClient = useQueryClient();
   const { mutate, isPending } = makeDeleteBanner();
 
