@@ -1,12 +1,4 @@
-import {
-  Button,
-  Group,
-  Text,
-  ActionIcon,
-  NumberInput,
-  Radio,
-  Divider,
-} from "@mantine/core";
+import { Button, Group, Text, NumberInput, Divider } from "@mantine/core";
 import { Trash } from "lucide-react";
 import { useState } from "react";
 
