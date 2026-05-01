@@ -22,7 +22,7 @@ export const HomeSlider = () => {
       onMouseEnter={autoplay.current.stop}
       onMouseLeave={() => autoplay.current.play()}
     >
-      {banners.map((banner) => (
+      {banners?.results?.map((banner) => (
         <Carousel.Slide key={banner.id}>
           <Image
             src={banner.image_url}

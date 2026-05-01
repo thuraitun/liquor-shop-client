@@ -8,6 +8,8 @@ import { Cart } from "../features/cart";
 import { AdminHome } from "../features/admin/admin-home";
 import { AdminBanner } from "../features/admin/banner";
 import { AdminLayout } from "../admin-layout";
+import { ProductDetail } from "../features/product/detail";
+import { Login } from "../features/admin/auth";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,10 @@ const router = createBrowserRouter([
         element: <Product />,
       },
       {
+        path: "products/:id",
+        element: <ProductDetail />,
+      },
+      {
         path: "about-us",
         element: <About />,
       },
@@ -36,7 +42,10 @@ const router = createBrowserRouter([
       },
     ],
   },
-
+  {
+    path: "/admin/login",
+    element: <Login />,
+  },
   {
     path: "/admin",
     element: <AdminLayout />,

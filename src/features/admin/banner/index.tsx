@@ -23,6 +23,7 @@ export const AdminBanner = () => {
     console.log(banner);
   };
 
+  console.log(data);
   const onDelete = (id: string) => {
     console.log("open delete modal", id);
     openDeleteModal();
@@ -46,9 +47,9 @@ export const AdminBanner = () => {
 
       <DataTable
         columns={columns}
-        data={data || []}
+        data={data?.results || []}
         isLoading={isLoading}
-        total={10}
+        total={data?.count || 0}
       />
 
       <AddBannerModal isOpen={addModalOpened} onClose={closeAddModal} />

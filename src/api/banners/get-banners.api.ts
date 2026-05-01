@@ -5,8 +5,8 @@ import type { Banner } from "../../type/banners/type";
 
 export const getBanners = async (query?: GetBannerQuery) => {
   return await apiClient
-    .get<{ results: Banner[] }>(`/banners/`, { params: query })
-    .then((res) => res.data.results);
+    .get<{ results: Banner[]; count: number }>(`/banners/`, { params: query })
+    .then((res) => res.data);
 };
 
 export const makeGetBanners = (query?: GetBannerQuery) =>

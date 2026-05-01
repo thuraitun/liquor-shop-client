@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ProductCard } from "../../components/product-card";
+import { ProductCategoriesCard } from "./components/product-categories-card";
 
 export const Product = () => {
   const product = [
@@ -111,10 +112,11 @@ export const Product = () => {
       </div>
 
       <div className="flex gap-4 justify-center">
-        <div className="w-1/4 bg-blue-500 sticky top-0">
-          <h1>Categories</h1>
+        <div className="w-1/4 sticky top-0 p-6 border border-[#e95959] h-fit rounded-md">
+          <h1 className="mb-5">Categories</h1>
+          <ProductCategoriesCard />
         </div>
-        <div className="w-3/4">
+        <div className="w-3/4 ">
           <div className="grid grid-cols-4 gap-4">
             {product.map((item) => (
               <Link
