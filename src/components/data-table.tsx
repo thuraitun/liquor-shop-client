@@ -58,7 +58,9 @@ export function DataTable<T>({
             </Table.Tr>
           ) : data.length === 0 ? (
             <Table.Tr>
-              <Table.Td colSpan={columns.length}>No data found</Table.Td>
+              <Table.Td colSpan={columns.length} align="center" py="lg">
+                No data found
+              </Table.Td>
             </Table.Tr>
           ) : (
             data.map((row, i) => (

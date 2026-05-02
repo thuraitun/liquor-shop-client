@@ -7,7 +7,7 @@ import { makeGetBanners } from "../../../api/banners/get-banners.api";
 
 export const HomeSlider = () => {
   const { data: banners } = useSuspenseQuery(
-    makeGetBanners({ is_active: true }),
+    makeGetBanners(),
   );
 
   const autoplay = useRef(Autoplay({ delay: 3000 }));

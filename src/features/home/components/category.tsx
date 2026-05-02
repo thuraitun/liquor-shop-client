@@ -1,40 +1,9 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { makeGetCategories } from "../../../api/categories/get-banner.api";
 import { CategoryCard } from "./category-card";
 
 export const Category = () => {
-  const categories = [
-    {
-      name: "Whiskey",
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      description: "Premium imported whiskey",
-      href: "/products",
-    },
-    {
-      name: "Vodka",
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      description: "Premium imported vodka",
-      href: "/products",
-    },
-    {
-      name: "Rum",
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      description: "Premium imported rum",
-      href: "/products",
-    },
-    {
-      name: "Tequila",
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      description: "Premium imported tequila",
-      href: "/products",
-    },
-    {
-      name: "Gin",
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      description: "Premium imported gin",
-      href: "/products",
-    },
-  ];
-
-  // const { data: categories } = useQuery(makeGetCategories());
+  const { data: categories } = useSuspenseQuery(makeGetCategories());
   return (
     <div className="py-6">
       <h1 className="text-xl font-bold text-center text-[#e95959] mb-6">
@@ -42,12 +11,12 @@ export const Category = () => {
       </h1>
 
       <div className="grid grid-cols-2 gap-4 justify-center">
-        {categories.map((category) => (
+        {categories?.results?.map((category) => (
           <CategoryCard
             name={category.name}
-            image={category.image}
+            image={category.image_url}
             description={category.description}
-            href={category.href}
+            href={"/products"}
           />
         ))}
       </div>

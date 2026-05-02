@@ -1,0 +1,12 @@
+import { z } from "zod";
+
+export const createCategorySchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string().min(1, "Description is required"),
+  image: z
+    .instanceof(File)
+    .refine((file) => file.size > 0, "Image is required"),
+  is_active: z.boolean().default(true).optional(),
+});
+
+export type CreateCategoryFormData = z.infer<typeof createCategorySchema>;

@@ -10,6 +10,7 @@ import { AdminBanner } from "../features/admin/banner";
 import { AdminLayout } from "../admin-layout";
 import { ProductDetail } from "../features/product/detail";
 import { Login } from "../features/admin/auth";
+import { AdminCategory } from "../features/admin/category";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
         path: "banners",
         element: <AdminBanner />,
       },
+      {
+        path: "categories",
+        element: <AdminCategory />,
+      }
     ],
   },
 ]);
