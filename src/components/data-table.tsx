@@ -1,102 +1,42 @@
-import { Table, TextInput, Group, Loader } from "@mantine/core";
-import { useState } from "react";
-import { useDebounce } from "../hooks/uss-debounce";
-import { TablePagination } from "./table-pagination";
-import { usePagination } from "../hooks/use-pagination";
+import { Table, Group, TextInput, Loader, Pagination } from "@mantine/core";
+import { useBaseFilter } from "../hooks/use-base-filter";
 
 export type Column<T> = {
   key: keyof T;
   header: string;
-
-  // old simple render
   render?: (row: T) => React.ReactNode;
-
-  // advanced cell API
-  cell?: (ctx: { row: T; index: number }) => React.ReactNode;
 };
 
-// type ExportOptions<T> = {
-//   getData: () => Promise<T[]>;
-//   format: (row: T) => Record<string, any>;
-//   filename: string;
-// };
-
-type DataTableProps<T> = {
+type Props<T> = {
   data: T[];
   columns: Column<T>[];
   isLoading?: boolean;
   total?: number;
-
-  // search
   searchboxProps?: {
     placeholder?: string;
   };
-
-  // action button
-  renderActionButton?: () => React.ReactNode;
 };
 
 export function DataTable<T>({
   data,
   columns,
   isLoading,
+  total = 0,
   searchboxProps,
-  renderActionButton,
-  total,
-}: DataTableProps<T>) {
-  const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search);
-
-  // search filter
-  const filteredData = data.filter((row) =>
-    JSON.stringify(row).toLowerCase().includes(debouncedSearch.toLowerCase()),
-  );
-
-  // export CSV
-  // const handleExport = async () => {
-  //   if (!exportOptionsProps) return;
-
-  //   const raw = await exportOptionsProps.getData();
-  //   const formatted = raw.map(exportOptionsProps.format);
-
-  //   if (!formatted.length) return;
-
-  //   const csv = [
-  //     Object.keys(formatted[0]).join(","),
-  //     ...formatted.map((row) => Object.values(row).join(",")),
-  //   ].join("\n");
-
-  //   const blob = new Blob([csv], { type: "text/csv" });
-  //   const url = URL.createObjectURL(blob);
-
-  //   const a = document.createElement("a");
-  //   a.href = url;
-  //   a.download = `${exportOptionsProps.filename}.csv`;
-  //   a.click();
-
-  //   URL.revokeObjectURL(url);
-  // };
-
-  const { page, paginatedIndex, totalCount, setPage } = usePagination(
-    total,
-    10,
-  );
+}: Props<T>) {
+  const { searchParams, setPage, setSearch } = useBaseFilter();
 
   return (
     <div>
-      {/* Toolbar */}
+      {/* Search */}
       <Group justify="end" mb="md">
-        <Group>
-          {searchboxProps && (
-            <TextInput
-              placeholder={searchboxProps.placeholder || "Search"}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          )}
-        </Group>
-
-        {renderActionButton && renderActionButton()}
+        {searchboxProps && (
+          <TextInput
+            placeholder={searchboxProps.placeholder}
+            defaultValue={searchParams.search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        )}
       </Group>
 
       {/* Table */}
@@ -110,31 +50,22 @@ export function DataTable<T>({
         </Table.Thead>
 
         <Table.Tbody>
-          {/* loading */}
           {isLoading ? (
             <Table.Tr>
-              <Table.Td colSpan={columns.length} align="center">
-                <Loader size="sm" />
+              <Table.Td colSpan={columns.length}>
+                <Loader />
               </Table.Td>
             </Table.Tr>
-          ) : /* empty */
-          filteredData.length === 0 ? (
+          ) : data.length === 0 ? (
             <Table.Tr>
-              <Table.Td colSpan={columns.length} align="center">
-                No data found
-              </Table.Td>
+              <Table.Td colSpan={columns.length}>No data found</Table.Td>
             </Table.Tr>
           ) : (
-            /* data rows */
-            filteredData.map((row, index) => (
-              <Table.Tr key={index}>
+            data.map((row, i) => (
+              <Table.Tr key={i}>
                 {columns.map((col) => (
                   <Table.Td key={String(col.key)}>
-                    {col.cell
-                      ? col.cell({ row, index })
-                      : col.render
-                        ? col.render(row)
-                        : String(row[col.key])}
+                    {col.render ? col.render(row) : String(row[col.key])}
                   </Table.Td>
                 ))}
               </Table.Tr>
@@ -142,8 +73,14 @@ export function DataTable<T>({
           )}
         </Table.Tbody>
       </Table>
-      <div className="flex justify-end">
-        <TablePagination total={totalCount} page={page} onChange={setPage} />
+
+      {/* Footer */}
+      <div className="flex justify-end mt-4">
+        <Pagination
+          value={searchParams.page}
+          total={Math.ceil(total / searchParams.limit)}
+          onChange={setPage}
+        />
       </div>
     </div>
   );

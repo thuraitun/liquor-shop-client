@@ -3,6 +3,7 @@ import type { Column } from "../../../../components/data-table";
 import type { Banner } from "../../../../type/banners/type";
 import { PencilLine, Trash2 } from "lucide-react";
 import { dateFormat } from "../../../../utils/date-format";
+import { Status } from "../../../../components/status";
 
 type Props = {
   onEdit: (banner: Banner) => void;
@@ -21,6 +22,11 @@ export const bannerColumns = ({
     ),
   },
   {
+    key: "is_active",
+    header: "Status",
+    render: (row) => <Status status={row.is_active} />,
+  },
+  {
     key: "created_at",
     header: "Created At",
     render: (row) => dateFormat(row.created_at),
@@ -33,25 +39,22 @@ export const bannerColumns = ({
   {
     key: "id",
     header: "Actions",
-    cell: ({ row }) => {
+    render: (row) => {
       return (
         <Group gap="md" pr={"xs"}>
           <ActionIcon
             variant="transparent"
             c="blue"
-            onClick={() => onEdit.bind(null, row)}
+            onClick={() => onEdit(row)}
           >
             <Tooltip label="Edit">
               <PencilLine />
             </Tooltip>
-          </ActionIcon> 
+          </ActionIcon>
           <ActionIcon
             variant="transparent"
             c="#e95959"
-            onClick={() => {
-              console.log("delete banner", row.id);
-              return onDelete(row.id);
-            }}
+            onClick={() => onDelete(row.id)}
           >
             <Tooltip label="Delete">
               <Trash2 />

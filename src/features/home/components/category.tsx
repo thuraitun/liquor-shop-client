@@ -35,7 +35,6 @@ export const Category = () => {
   ];
 
   // const { data: categories } = useQuery(makeGetCategories());
-  // console.log(categories);
   return (
     <div className="py-6">
       <h1 className="text-xl font-bold text-center text-[#e95959] mb-6">

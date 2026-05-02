@@ -14,7 +14,7 @@ export const AddBannerModal = ({
   onClose: () => void;
 }) => {
   const queryClient = useQueryClient();
-  const { mutate } = makeCreateBanner();
+  const { mutate, isPending } = makeCreateBanner();
 
   const onSubmit = (data: CreateBannerFormData) =>
     mutate(data, {
@@ -33,7 +33,7 @@ export const AddBannerModal = ({
     });
   return (
     <Modal title="Add Banner" opened={isOpen} onClose={onClose} centered>
-      <BannerForm onSubmit={onSubmit} onClose={onClose} />
+      <BannerForm onSubmit={onSubmit} onClose={onClose} isPending={isPending} />
     </Modal>
   );
 };

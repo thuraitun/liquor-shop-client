@@ -9,23 +9,29 @@ import { AddBannerModal } from "./components/add-banner-modal";
 import { useMemo, useState } from "react";
 import type { Banner } from "../../../type/banners/type";
 import { DeleteBannerModal } from "./components/delete-banner-modal";
+import { EditBannerModal } from "./components/edit-banner-modal";
+import { useBaseFilter } from "../../../hooks/use-base-filter";
+
 export const AdminBanner = () => {
-  const { data, isLoading } = useSuspenseQuery(makeGetBanners());
+  const { searchParams } = useBaseFilter();
+  const { data, isLoading } = useSuspenseQuery(makeGetBanners(searchParams));
   const [addModalOpened, { open: openAddModal, close: closeAddModal }] =
+    useDisclosure(false);
+  const [editModalOpened, { open: openEditModal, close: closeEditModal }] =
     useDisclosure(false);
   const [
     deleteModalOpened,
     { open: openDeleteModal, close: closeDeleteModal },
   ] = useDisclosure(false);
   const [bannerId, setBannerId] = useState<string>("");
+  const [banner, setBanner] = useState<Banner>({} as Banner);
 
   const onEdit = (banner: Banner) => {
-    console.log(banner);
+    openEditModal();
+    setBanner(banner);
   };
 
-  console.log(data);
   const onDelete = (id: string) => {
-    console.log("open delete modal", id);
     openDeleteModal();
     setBannerId(id);
   };
@@ -57,6 +63,11 @@ export const AdminBanner = () => {
         isOpen={deleteModalOpened}
         id={bannerId}
         onClose={closeDeleteModal}
+      />
+      <EditBannerModal
+        isOpen={editModalOpened}
+        banner={banner}
+        onClose={closeEditModal}
       />
     </div>
   );
