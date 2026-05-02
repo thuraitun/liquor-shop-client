@@ -1,6 +1,8 @@
 import { Table, TextInput, Group, Loader } from "@mantine/core";
 import { useState } from "react";
 import { useDebounce } from "../hooks/uss-debounce";
+import { TablePagination } from "./table-pagination";
+import { usePagination } from "../hooks/use-pagination";
 
 export type Column<T> = {
   key: keyof T;
@@ -40,6 +42,7 @@ export function DataTable<T>({
   isLoading,
   searchboxProps,
   renderActionButton,
+  total,
 }: DataTableProps<T>) {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search);
@@ -73,6 +76,11 @@ export function DataTable<T>({
 
   //   URL.revokeObjectURL(url);
   // };
+
+  const { page, paginatedIndex, totalCount, setPage } = usePagination(
+    total,
+    10,
+  );
 
   return (
     <div>
@@ -134,6 +142,9 @@ export function DataTable<T>({
           )}
         </Table.Tbody>
       </Table>
+      <div className="flex justify-end">
+        <TablePagination total={totalCount} page={page} onChange={setPage} />
+      </div>
     </div>
   );
 }

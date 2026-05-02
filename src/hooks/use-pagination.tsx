@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-export function usePagination<T>(data: T[], pageSize = 5) {
+export function usePagination(count: number, pageSize = 5) {
   const [page, setPage] = useState(1);
 
-  const total = Math.ceil(data.length / pageSize);
+  const totalCount = Math.ceil(count / pageSize);
 
-  const paginatedData = data.slice((page - 1) * pageSize, page * pageSize);
+  const paginatedIndex = (page - 1) * pageSize;
 
-  return { page, setPage, total, paginatedData };
+  return { page, setPage, totalCount, paginatedIndex };
 }
