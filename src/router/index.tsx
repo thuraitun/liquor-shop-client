@@ -11,6 +11,7 @@ import { AdminLayout } from "../admin-layout";
 import { ProductDetail } from "../features/product/detail";
 import { Login } from "../features/admin/auth";
 import { AdminCategory } from "../features/admin/category";
+import { AdminProduct } from "../features/admin/product";
 
 const router = createBrowserRouter([
   {
@@ -62,7 +63,11 @@ const router = createBrowserRouter([
       {
         path: "categories",
         element: <AdminCategory />,
-      }
+      },
+      {
+        path: "products",
+        element: <AdminProduct />,
+      },
     ],
   },
 ]);

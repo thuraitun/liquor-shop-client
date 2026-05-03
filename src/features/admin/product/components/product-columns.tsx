@@ -1,19 +1,19 @@
 import { ActionIcon, Group, Tooltip } from "@mantine/core";
 import type { Column } from "../../../../components/data-table";
 import { Status } from "../../../../components/status";
-import type { Category } from "../../../../type/categories/type";
+import type { Product } from "../../../../type/products/type";
 import { dateFormat } from "../../../../utils/date-format";
 import { PencilLine, Trash2 } from "lucide-react";
 
 type Props = {
-  onEdit: (category: Category) => void;
+  onEdit: (product: Product) => void;
   onDelete: (id: string) => void;
 };
 
-export const categoryColumns = ({
+export const productColumns = ({
   onEdit,
   onDelete,
-}: Props): Column<Category>[] => [
+}: Props): Column<Product>[] => [
   {
     key: "image_url",
     header: "Image",
@@ -30,6 +30,11 @@ export const categoryColumns = ({
     key: "description",
     header: "Description",
     render: (row) => row.description,
+  },
+  {
+    key: "price",
+    header: "Price",
+    render: (row) => row.price?.toLocaleString(),
   },
   {
     key: "is_active",

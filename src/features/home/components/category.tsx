@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { makeGetCategories } from "../../../api/categories/get-banner.api";
+import { makeGetCategories } from "../../../api/categories/get-categories.api";
 import { CategoryCard } from "./category-card";
 
 export const Category = () => {

@@ -1,19 +1,19 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useBaseFilter } from "../../../hooks/use-base-filter";
-import { makeGetCategories } from "../../../api/categories/get-categories.api";
+import { makeGetProducts } from "../../../api/products/get-products.api";
 import { useDisclosure } from "@mantine/hooks";
 import { useMemo, useState } from "react";
-import type { Category } from "../../../type/categories/type";
+import type { Product } from "../../../type/products/type";
+import { productColumns } from "./components/product-columns";
 import { Button } from "@mantine/core";
 import { DataTable } from "../../../components/data-table";
-import { categoryColumns } from "./components/category-columns";
-import { AddCategoryModal } from "./components/add-category-modal";
-import { DeleteCategoryModal } from "./components/delete-category-modal";
-import { EditCategoryModal } from "./components/edit-category-modal";
+import { AddProductModal } from "./components/add-product-form";
+import { DeleteProductModal } from "./components/delete-product-modal";
+import { EditProductModal } from "./components/edit-product-modal";
 
-export const AdminCategory = () => {
+export const AdminProduct = () => {
   const { searchParams } = useBaseFilter();
-  const { data, isLoading } = useSuspenseQuery(makeGetCategories(searchParams));
+  const { data, isLoading } = useSuspenseQuery(makeGetProducts(searchParams));
   const [addModalOpened, { open: openAddModal, close: closeAddModal }] =
     useDisclosure(false);
   const [editModalOpened, { open: openEditModal, close: closeEditModal }] =
@@ -22,32 +22,32 @@ export const AdminCategory = () => {
     deleteModalOpened,
     { open: openDeleteModal, close: closeDeleteModal },
   ] = useDisclosure(false);
-  const [categoryId, setCategoryId] = useState<string>("");
-  const [category, setCategory] = useState<Category>({} as Category);
+  const [productId, setProductId] = useState<string>("");
+  const [product, setProduct] = useState<Product>({} as Product);
 
-  const onEdit = (category: Category) => {
+  const onEdit = (product: Product) => {
     openEditModal();
-    setCategory(category);
+    setProduct(product);
   };
 
   const onDelete = (id: string) => {
     openDeleteModal();
-    setCategoryId(id);
+    setProductId(id);
   };
 
   const columns = useMemo(
-    () => categoryColumns({ onEdit, onDelete }),
+    () => productColumns({ onEdit, onDelete }),
     [onEdit, onDelete],
   );
 
   return (
     <div className="my-6">
       <h1 className="text-lg text-center my-5 text-[#e95959] font-bold">
-        Category
+        Product
       </h1>
 
       <div className="flex justify-end my-5">
-        <Button onClick={openAddModal}>Add Category</Button>
+        <Button onClick={openAddModal}>Add Product</Button>
       </div>
 
       <DataTable
@@ -57,15 +57,15 @@ export const AdminCategory = () => {
         total={data?.count || 0}
       />
 
-      <AddCategoryModal isOpen={addModalOpened} onClose={closeAddModal} />
-      <DeleteCategoryModal
+      <AddProductModal isOpen={addModalOpened} onClose={closeAddModal} />
+      <DeleteProductModal
         isOpen={deleteModalOpened}
-        id={categoryId}
+        id={productId}
         onClose={closeDeleteModal}
       />
-      <EditCategoryModal
+      <EditProductModal
         isOpen={editModalOpened}
-        category={category}
+        product={product}
         onClose={closeEditModal}
       />
     </div>

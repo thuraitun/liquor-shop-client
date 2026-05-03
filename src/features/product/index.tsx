@@ -1,105 +1,11 @@
 import { Link } from "react-router-dom";
 import { ProductCard } from "../../components/product-card";
 import { ProductCategoriesCard } from "./components/product-categories-card";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { makeGetProducts } from "../../api/products/get-products.api";
 
 export const Product = () => {
-  const product = [
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product 2flkdsafjldsafj  akfjaldfjdsa",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product 3flkdsafjldsafj ldsakfjdss akfjaldfjdsa dlfalkfdjasdlfk",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product 4flkdsafjdsa",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product ldsakfjdss akfjaldfjdsa",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product ldsakfjdss akfjaldfjdsa",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product ldsakfjdss akfjaldfjdsa",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product ldsakfjdss akfjaldfjdsa",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product ldsakfjdss akfjaldfjdsa",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product",
-      price: "$100.00",
-    },
-    {
-      image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-      name: "Product",
-      price: "$100.00",
-    },
-  ];
+  const { data: products } = useSuspenseQuery(makeGetProducts());
   return (
     <div>
       <div className="flex justify-center items-center">
@@ -118,14 +24,14 @@ export const Product = () => {
         </div>
         <div className="w-3/4 ">
           <div className="grid grid-cols-4 gap-4">
-            {product.map((item) => (
+            {products?.results?.map((item) => (
               <Link
-                to={`/products/${item.name}`}
-                key={item.name}
+                to={`/products/${item.id}`}
+                key={item.id}
                 className="col-span-1"
               >
                 <ProductCard
-                  image={item.image}
+                  image={item.image_url}
                   name={item.name}
                   price={item.price}
                 />

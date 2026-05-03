@@ -1,19 +1,21 @@
+import { useParams } from "react-router-dom";
 import { ProductDetailCard } from "../components/product-detail-card";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { makeGetProductById } from "../../../api/products/get-product-by-id.api";
 
 export const ProductDetail = () => {
-  const product = {
-    image: "https://images.unsplash.com/photo-1584225064785-c62a8b43d148",
-    name: "Product",
-    description: "Product description",
-    price: 10000,
-  };
+  const { id } = useParams<{ id: string }>();
+
+  const { data: product } = useSuspenseQuery(makeGetProductById(id || ""));
+
   return (
     <div className="my-8">
       <ProductDetailCard
-        image={product.image}
-        name={product.name}
-        price={product.price}
-        description={product.description}
+        id={product?.id}
+        image={product?.image_url}
+        name={product?.name}
+        price={Number(product?.price)}
+        description={product?.description}
       />
     </div>
   );

@@ -1,51 +1,58 @@
 import { Button, Group, Text, NumberInput, Divider } from "@mantine/core";
 import { Trash } from "lucide-react";
-import { useState } from "react";
-
-type CartItem = {
-  id: string;
-  name: string;
-  price: number;
-  qty: number;
-  image: string;
-};
-
-const initialItems: CartItem[] = [
-  {
-    id: "1",
-    name: "21-SW-AA-2801 (Plywood Altar)",
-    price: 1674000,
-    qty: 2,
-    image: "/images/product.png",
-  },
-];
+import { useEffect, useState } from "react";
+import {
+  getCart,
+  updateCartQty,
+  removeFromCart,
+  type CartItem,
+} from "../../../utils/cart";
+import { useNavigate } from "react-router-dom";
 
 export const CartItems = () => {
-  const [items, setItems] = useState<CartItem[]>(initialItems);
+  const [items, setItems] = useState<CartItem[]>([]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setItems(getCart());
+  }, []);
 
   const updateQty = (id: string, qty: number) => {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, qty: Math.max(1, qty) } : item,
-      ),
-    );
+    const updated = updateCartQty(id, qty);
+    setItems(updated);
   };
 
   const removeItem = (id: string) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
+    const updated = removeFromCart(id);
+    setItems(updated);
   };
 
   const subtotal = items.reduce((acc, item) => acc + item.price * item.qty, 0);
+
+  if (items.length === 0) {
+    return (
+      <div className="text-center py-20">
+        <Text size="lg" fw={500} mb="md">
+          Your cart is empty 🛒
+        </Text>
+        <Button variant="outline" size="sm" onClick={() => navigate("/products")}>
+          Continue Shopping →
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto p-6">
       <Text fw={700} size="xl" mb="lg">
         YOUR SHOPPING CART
       </Text>
+
       <Divider className="mb-4" />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* LEFT SIDE */}
+        {/* LEFT */}
         <div className="md:col-span-2 space-y-4">
           {items.map((item) => (
             <div
@@ -78,7 +85,7 @@ export const CartItems = () => {
 
                   <NumberInput
                     value={item.qty}
-                    onChange={(val) => updateQty(item.id, Number(val))}
+                    onChange={(val) => updateQty(item.id, Number(val) || 1)}
                     hideControls
                     className="w-16"
                   />
@@ -92,13 +99,17 @@ export const CartItems = () => {
                 </Group>
 
                 {/* REMOVE */}
-                <Trash color="red" onClick={() => removeItem(item.id)} />
+                <Trash
+                  color="red"
+                  className="cursor-pointer"
+                  onClick={() => removeItem(item.id)}
+                />
               </Group>
             </div>
           ))}
         </div>
 
-        {/* RIGHT SIDE - SUMMARY */}
+        {/* RIGHT */}
         <div className="bg-gray-50 p-6 rounded-md h-fit">
           <Text fw={600} size="lg" mb="md">
             Order summary

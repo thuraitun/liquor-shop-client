@@ -1,9 +1,9 @@
 import { Controller, useForm } from "react-hook-form";
 import {
-  createCategorySchema,
-  type CreateCategoryFormData,
-} from "../../../../schemas/categories/create-category.schema";
-import type { Category } from "../../../../type/categories/type";
+  createProductSchema,
+  type CreateProductFormData,
+} from "../../../../schemas/products/create-product.schema";
+import type { Product } from "../../../../type/products/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import {
@@ -11,45 +11,60 @@ import {
   Checkbox,
   FileInput,
   Image,
+  Select,
   Textarea,
   TextInput,
 } from "@mantine/core";
+import { useQuery } from "@tanstack/react-query";
+import { makeGetCategories } from "../../../../api/categories/get-categories.api";
 
-export const CategoryForm = ({
+export const ProductForm = ({
   onSubmit,
   onClose,
-  category,
+  product,
   isPending = false,
 }: {
-  onSubmit: (data: CreateCategoryFormData) => void;
+  onSubmit: (data: CreateProductFormData) => void;
   onClose: () => void;
-  category?: Category | null;
+  product?: Product | null;
   isPending?: boolean;
 }) => {
-  const form = useForm<CreateCategoryFormData>({
-    resolver: zodResolver(createCategorySchema),
+  const form = useForm<CreateProductFormData>({
+    resolver: zodResolver(createProductSchema),
     defaultValues: {
       image: null,
       name: null,
+      price: null,
+      category_id: null,
       description: null,
       is_active: true,
     },
   });
+
+  const { data: categories, isLoading } = useQuery(makeGetCategories());
+
+  const categoryOpts =
+    categories?.results?.map((item) => ({
+      label: item.name,
+      value: item.id,
+    })) || [];
 
   const [preview, setPreview] = useState<string | null>(null);
 
   const imageFile = form.watch("image");
 
   useEffect(() => {
-    if (category) {
+    if (product) {
       form.reset({
         image: null,
-        description: category.description,
-        name: category.name,
-        is_active: category.is_active,
+        description: product.description,
+        name: product.name,
+        price: product.price,
+        category_id: product.category_id,
+        is_active: product.is_active,
       });
 
-      setPreview(category.image_url);
+      setPreview(product.image_url);
     } else {
       form.reset({
         image: null,
@@ -59,7 +74,7 @@ export const CategoryForm = ({
       });
       setPreview(null);
     }
-  }, [category, form]);
+  }, [product, form]);
 
   useEffect(() => {
     if (imageFile) {
@@ -79,11 +94,11 @@ export const CategoryForm = ({
       <Controller
         name="image"
         control={form.control}
-        rules={{ required: !category ? "Image is required" : false }}
+        rules={{ required: !product ? "Image is required" : false }}
         render={({ field, fieldState }) => (
           <FileInput
-            label="Category Image"
-            placeholder="Upload category image"
+            label="Product Image"
+            placeholder="Upload product image"
             accept="image/*"
             withAsterisk
             value={field.value}
@@ -99,11 +114,46 @@ export const CategoryForm = ({
       )}
 
       <TextInput
-        label="Category Name"
-        placeholder="Enter category name"
+        label="Product Name"
+        placeholder="Enter product name"
         withAsterisk
         {...form.register("name")}
         error={form.formState.errors.name?.message}
+      />
+
+      <Controller
+        name="category_id"
+        control={form.control}
+        rules={{ required: "Category is required" }}
+        render={({ field }) => (
+          <Select
+            label="Category"
+            placeholder="Select product category"
+            data={categoryOpts}
+            withAsterisk
+            searchable
+            loading={isLoading}
+            value={field.value}
+            onChange={field.onChange}
+          />
+        )}
+      />
+
+      <Controller
+        name="price"
+        control={form.control}
+        rules={{ required: "Price is required" }}
+        render={({ field, fieldState }) => (
+          <TextInput
+            label="Price"
+            type="number"
+            placeholder="Enter product price"
+            withAsterisk
+            value={field.value}
+            onChange={field.onChange}
+            error={fieldState.error?.message}
+          />
+        )}
       />
 
       <Controller
@@ -113,7 +163,7 @@ export const CategoryForm = ({
         render={({ field, fieldState }) => (
           <Textarea
             label="Description"
-            placeholder="Enter description"
+            placeholder="Enter product description"
             onChange={field.onChange}
             value={field.value}
             error={fieldState.error?.message}
@@ -139,7 +189,7 @@ export const CategoryForm = ({
           Cancel
         </Button>
         <Button type="submit" loading={isPending}>
-          {category ? "Update" : "Save"}
+          {product ? "Update" : "Save"}
         </Button>
       </div>
     </form>
